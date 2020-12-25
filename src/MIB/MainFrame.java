@@ -5,17 +5,48 @@
  */
 package MIB;
 
+import MIB.Inloggning.Inloggning;
+import MIB.Inloggning.MenyAgent;
+import MIB.Inloggning.Sidor.AndraLosenord;
+import java.awt.BorderLayout;
+import oru.inf.InfDB;
+
 /**
  *
  * @author Hampus
  */
 public class MainFrame extends javax.swing.JFrame {
-
+    private static InfDB idb;
+    Inloggning inloggning;
+    MenyAgent agentMeny;
+    AndraLosenord andraLosen;
     /**
      * Creates new form MainFrame
      */
-    public MainFrame() {
+    public MainFrame(InfDB databas) {
+        idb = databas;
         initComponents();
+        inloggning = new Inloggning(idb);
+        agentMeny = new MenyAgent(idb);
+        andraLosen = new AndraLosenord(idb);
+        
+        
+       // Fyller HuvudPanel med Inloggning-panelen
+        jlpHuvudPanel.setLayout(new BorderLayout());
+        jlpHuvudPanel.add(inloggning, BorderLayout.NORTH);
+        
+        // Fyller MenyVisaPanel med agentMeny-panelen
+        jlpMenyVisaPanel.setLayout(new BorderLayout());
+        jlpMenyVisaPanel.add(agentMeny, BorderLayout.NORTH);
+    }
+    
+
+// Ska ändra innehåller i jlpHuvudPanel till AndraLosenord (JPanel)
+    public void VisaAndraLosen(InfDB databas){
+        andraLosen = new AndraLosenord(idb);
+        idb = databas;
+        jlpHuvudPanel.add(andraLosen, BorderLayout.NORTH);
+    
     }
 
     /**
@@ -27,62 +58,47 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        LoggaInPanel = new javax.swing.JLayeredPane();
-        MenyVisaPanel = new javax.swing.JLayeredPane();
+        jlpMenyVisaPanel = new javax.swing.JLayeredPane();
         jlpHuvudPanel = new javax.swing.JLayeredPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 500));
+        setPreferredSize(new java.awt.Dimension(700, 500));
 
-        javax.swing.GroupLayout MenyVisaPanelLayout = new javax.swing.GroupLayout(MenyVisaPanel);
-        MenyVisaPanel.setLayout(MenyVisaPanelLayout);
-        MenyVisaPanelLayout.setHorizontalGroup(
-            MenyVisaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jlpMenyVisaPanelLayout = new javax.swing.GroupLayout(jlpMenyVisaPanel);
+        jlpMenyVisaPanel.setLayout(jlpMenyVisaPanelLayout);
+        jlpMenyVisaPanelLayout.setHorizontalGroup(
+            jlpMenyVisaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 152, Short.MAX_VALUE)
         );
-        MenyVisaPanelLayout.setVerticalGroup(
-            MenyVisaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 336, Short.MAX_VALUE)
+        jlpMenyVisaPanelLayout.setVerticalGroup(
+            jlpMenyVisaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 392, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jlpHuvudPanelLayout = new javax.swing.GroupLayout(jlpHuvudPanel);
         jlpHuvudPanel.setLayout(jlpHuvudPanelLayout);
         jlpHuvudPanelLayout.setHorizontalGroup(
             jlpHuvudPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 432, Short.MAX_VALUE)
+            .addGap(0, 512, Short.MAX_VALUE)
         );
         jlpHuvudPanelLayout.setVerticalGroup(
             jlpHuvudPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        LoggaInPanel.setLayer(MenyVisaPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        LoggaInPanel.setLayer(jlpHuvudPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        javax.swing.GroupLayout LoggaInPanelLayout = new javax.swing.GroupLayout(LoggaInPanel);
-        LoggaInPanel.setLayout(LoggaInPanelLayout);
-        LoggaInPanelLayout.setHorizontalGroup(
-            LoggaInPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(LoggaInPanelLayout.createSequentialGroup()
-                .addComponent(MenyVisaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlpHuvudPanel))
-        );
-        LoggaInPanelLayout.setVerticalGroup(
-            LoggaInPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MenyVisaPanel)
-            .addComponent(jlpHuvudPanel)
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(LoggaInPanel)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jlpMenyVisaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlpHuvudPanel))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(LoggaInPanel)
+            .addComponent(jlpMenyVisaPanel)
+            .addComponent(jlpHuvudPanel)
         );
 
         pack();
@@ -91,41 +107,40 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainFrame().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new MainFrame().setVisible(true);
+//            }
+//        });
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLayeredPane LoggaInPanel;
-    private javax.swing.JLayeredPane MenyVisaPanel;
     private javax.swing.JLayeredPane jlpHuvudPanel;
+    private javax.swing.JLayeredPane jlpMenyVisaPanel;
     // End of variables declaration//GEN-END:variables
 }

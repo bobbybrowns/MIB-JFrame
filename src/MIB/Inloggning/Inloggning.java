@@ -38,6 +38,10 @@ public class Inloggning extends javax.swing.JPanel {
         initComponents();
     }
 
+    public Inloggning() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 //    public Inloggning() {
 //   
 //    }
