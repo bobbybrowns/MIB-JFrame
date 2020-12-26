@@ -65,7 +65,8 @@ public class MenyAgent extends javax.swing.JPanel {
     private void jbtnAndraLosenordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAndraLosenordActionPerformed
 
         // Ska köra metoden VisaAndraLosen() från MainFrame.
-         //MIB.MainFrame.VisaAndraLosen(InfDB db);
+         //MainFrame.VisaAndraLosen();
+         
         
     }//GEN-LAST:event_jbtnAndraLosenordActionPerformed
 

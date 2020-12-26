@@ -8,6 +8,8 @@ package MIB;
 import MIB.Inloggning.Inloggning;
 import MIB.Inloggning.MenyAgent;
 import MIB.Inloggning.Sidor.AndraLosenord;
+import MIB.Inloggning.Sidor.RegistreraAliens;
+import MIB.Inloggning.Sidor.VisaChefForValtOmrade;
 import java.awt.BorderLayout;
 import oru.inf.InfDB;
 
@@ -17,9 +19,12 @@ import oru.inf.InfDB;
  */
 public class MainFrame extends javax.swing.JFrame {
     private static InfDB idb;
+    public boolean inloggad = false;
     Inloggning inloggning;
     MenyAgent agentMeny;
     AndraLosenord andraLosen;
+    VisaChefForValtOmrade visaChef;
+    RegistreraAliens regAliens;
     /**
      * Creates new form MainFrame
      */
@@ -29,11 +34,13 @@ public class MainFrame extends javax.swing.JFrame {
         inloggning = new Inloggning(idb);
         agentMeny = new MenyAgent(idb);
         andraLosen = new AndraLosenord(idb);
+        visaChef = new VisaChefForValtOmrade(idb);
+        regAliens = new RegistreraAliens(idb);
         
         
        // Fyller HuvudPanel med Inloggning-panelen
         jlpHuvudPanel.setLayout(new BorderLayout());
-        jlpHuvudPanel.add(inloggning, BorderLayout.NORTH);
+        jlpHuvudPanel.add(regAliens, BorderLayout.NORTH);
         
         // Fyller MenyVisaPanel med agentMeny-panelen
         jlpMenyVisaPanel.setLayout(new BorderLayout());
@@ -42,10 +49,14 @@ public class MainFrame extends javax.swing.JFrame {
     
 
 // Ska ändra innehåller i jlpHuvudPanel till AndraLosenord (JPanel)
-    public void VisaAndraLosen(InfDB databas){
+    public void VisaAndraLosen(){
         andraLosen = new AndraLosenord(idb);
-        idb = databas;
+        //idb = databas;
         jlpHuvudPanel.add(andraLosen, BorderLayout.NORTH);
+    
+    }
+    public void andraInloggadStatus(){
+    inloggad = true;
     
     }
 
