@@ -5,6 +5,7 @@
  */
 package MIB;
 
+import MIB.Inloggning.LoggaIn;
 import javax.swing.JOptionPane;
 import oru.inf.InfDB;
 import oru.inf.InfException;
@@ -35,7 +36,7 @@ public class Start {
             System.out.println("Fel vid koppling" + e.getMessage());
         }
         
-        new MainFrame(idb).setVisible(true);
+        new LoggaIn(idb).setVisible(true);
         
         
     }

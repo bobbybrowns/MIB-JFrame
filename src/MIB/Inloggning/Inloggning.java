@@ -5,6 +5,7 @@
  */
 package MIB.Inloggning;
 
+import MIB.MainFrame;
 import MIB.Validering;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -194,6 +195,8 @@ public class Inloggning extends javax.swing.JPanel {
           try {
 
             nam = idb.fetchSingle(sqlF);
+            new MainFrame(idb).setVisible(true);
+            //LggaIn(idb).setVisible(false);
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Felmeddelande!");
         }
