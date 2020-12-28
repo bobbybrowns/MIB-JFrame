@@ -17,8 +17,10 @@ import oru.inf.InfException;
  * @author Hampus
  */
 public class Inloggning extends javax.swing.JPanel {
+
+    
     private InfDB idb;
-    private int behorighet;
+    private static int behorighet;
     
 
     /**
@@ -209,6 +211,11 @@ public class Inloggning extends javax.swing.JPanel {
         
     }//GEN-LAST:event_btnLoggaInActionPerformed
 
+    public static int getBehorighet() {
+        return behorighet;
+    }
+    
+    
     private void rbAgentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbAgentActionPerformed
         // TODO add your handling code here:
         

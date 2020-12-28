@@ -6,11 +6,14 @@
 package MIB;
 
 import MIB.Inloggning.Inloggning;
+import MIB.Inloggning.MenyAdmin;
 import MIB.Inloggning.MenyAgent;
+import MIB.Inloggning.MenyAlien;
 import MIB.Inloggning.Sidor.AndraLosenord;
 import MIB.Inloggning.Sidor.RegistreraAliens;
 import MIB.Inloggning.Sidor.VisaChefForValtOmrade;
 import java.awt.BorderLayout;
+import javax.swing.JPanel;
 import oru.inf.InfDB;
 
 /**
@@ -22,43 +25,99 @@ public class MainFrame extends javax.swing.JFrame {
     public boolean inloggad = false;
     Inloggning inloggning;
     MenyAgent agentMeny;
+    MenyAlien alienMeny;
+    MenyAdmin adminMeny;
     AndraLosenord andraLosen;
     VisaChefForValtOmrade visaChef;
     RegistreraAliens regAliens;
+    MainFrame mainFrame;
+    int behorighet;
     /**
      * Creates new form MainFrame
      */
     public MainFrame(InfDB databas) {
         idb = databas;
         initComponents();
+        behorighet = MIB.Inloggning.Inloggning.getBehorighet();
+        
         inloggning = new Inloggning(idb);
         agentMeny = new MenyAgent(idb);
         andraLosen = new AndraLosenord(idb);
         visaChef = new VisaChefForValtOmrade(idb);
         regAliens = new RegistreraAliens(idb);
+        visaInnehall();
         
         
-       // Fyller HuvudPanel med Inloggning-panelen
-        jlpHuvudPanel.setLayout(new BorderLayout());
-        jlpHuvudPanel.add(regAliens, BorderLayout.NORTH);
-        
-        // Fyller MenyVisaPanel med agentMeny-panelen
-        jlpMenyVisaPanel.setLayout(new BorderLayout());
-        jlpMenyVisaPanel.add(agentMeny, BorderLayout.NORTH);
     }
     
 
 // Ska ändra innehåller i jlpHuvudPanel till AndraLosenord (JPanel)
-    public void VisaAndraLosen(){
-        andraLosen = new AndraLosenord(idb);
-        //idb = databas;
-        jlpHuvudPanel.add(andraLosen, BorderLayout.NORTH);
-    
+    public void visaInnehall(){
+        if(behorighet == 1){
+        jlpMenyVisaPanel.setLayout(new BorderLayout());
+        jlpMenyVisaPanel.add(agentMeny, BorderLayout.NORTH);
+        }
+        else if(behorighet == 2){
+        jlpMenyVisaPanel.setLayout(new BorderLayout());
+        jlpMenyVisaPanel.add(alienMeny, BorderLayout.NORTH);
+        }
+        else if(behorighet == 3){
+        jlpMenyVisaPanel.setLayout(new BorderLayout());
+        jlpMenyVisaPanel.add(adminMeny, BorderLayout.NORTH);
+        
+        }
+//        jlpHuvudPanel.setLayout(new BorderLayout());
+//        jlpHuvudPanel.add(inloggning, BorderLayout.NORTH);
+////        jlpMenyVisaPanel.setLayout(new BorderLayout());
+////        jlpMenyVisaPanel.add(agentMeny, BorderLayout.NORTH);
+        
     }
-    public void andraInloggadStatus(){
-    inloggad = true;
     
+    public void rensaInnehall(){
+       jlpHuvudPanel.removeAll();
+       jlpHuvudPanel.repaint();
+       jlpHuvudPanel.invalidate();
+       jlpHuvudPanel.revalidate();
+       
+        
     }
+    
+    public void visaChef(){
+        jlpHuvudPanel.removeAll();
+        jlpHuvudPanel.setLayout(new BorderLayout());
+        jlpHuvudPanel.add(visaChef, BorderLayout.NORTH);
+        jlpHuvudPanel.invalidate();
+        jlpHuvudPanel.repaint();
+        jlpHuvudPanel.revalidate();
+//        jlpMenyVisaPanel.setLayout(new BorderLayout());
+//        jlpMenyVisaPanel.add(agentMeny, BorderLayout.NORTH);
+//        mainFrame = new MainFrame(idb);
+//        //visaChef = new VisaChefForValtOmrade(idb);
+//        jlpHuvudPanel.remove(regAliens);
+//        mainFrame.removeAll();
+//        revalidate();
+       
+         //andraLosen = new AndraLosenord(idb);
+//        MainFrame mainFrame = new MainFrame(idb);
+//        jlpHuvudPanel = new javax.swing.JLayeredPane();
+//        visaChef = new VisaChefForValtOmrade(idb);
+//        visaChef.move
+//         visaChef.setLayout(new BorderLayout());
+//        visaChef.add(regAliens, BorderLayout.NORTH);
+//      mainFrame.remove(jlpHuvudPanel);
+//        //jlpHuvudPanel.add(visaChef, BorderLayout.NORTH);
+//        mainFrame.getContentPane().remove(jlpHuvudPanel);
+//        mainFrame.getContentPane().add(visaChef);
+//        mainFrame.invalidate();
+//        mainFrame.validate();
+        //jlpHuvudPanel.dispose();
+        
+
+    }
+//    public void andraInloggadStatus(){
+//    inloggad = true;
+//    
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -94,7 +153,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         jlpHuvudPanelLayout.setVerticalGroup(
             jlpHuvudPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 392, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
