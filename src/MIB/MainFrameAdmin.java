@@ -22,7 +22,7 @@ public class MainFrameAdmin extends javax.swing.JFrame {
     public MainFrameAdmin() {
         //idb = databas;
         initComponents();
-        adminMeny = new MenyAdmin();
+        adminMeny = new MenyAdmin(idb);
         pnlAdminMeny.setLayout(new BorderLayout());
         pnlAdminMeny.add(adminMeny);
     }

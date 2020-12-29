@@ -23,7 +23,7 @@ public class MainFrameAlien_1 extends javax.swing.JFrame {
     public MainFrameAlien_1(InfDB databas) {
         idb = databas;
         initComponents();
-        alienMeny = new MenyAlien();
+        alienMeny = new MenyAlien(idb);
         pnlAlienMeny.setLayout(new BorderLayout());
         pnlAlienMeny.add(alienMeny);
     }

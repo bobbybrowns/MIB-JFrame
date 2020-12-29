@@ -40,7 +40,7 @@ public class JFVisaAlienOmrade extends javax.swing.JFrame {
 
         pnlVisaAlienOmrade = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         javax.swing.GroupLayout pnlVisaAlienOmradeLayout = new javax.swing.GroupLayout(pnlVisaAlienOmrade);
         pnlVisaAlienOmrade.setLayout(pnlVisaAlienOmradeLayout);
