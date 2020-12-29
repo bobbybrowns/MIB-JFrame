@@ -5,8 +5,10 @@
  */
 package MIB.Inloggning.Sidor;
 
+import MIB.Validering;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JOptionPane;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
@@ -17,36 +19,118 @@ import oru.inf.InfException;
 public class RegistreraAliens extends javax.swing.JPanel {
     InfDB idb;
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    Date datum = new Date();  
-
+    private Date datum = new Date();  
+    private String getRasArv;
+    private int rasArvInput;
+    private int max;
+    private String losen;
+    private boolean behoverArv;
+    private String omrade;
+    private String agent;
 
     /**
      * Creates new form RegistreraAliens
+     * @param databas
      */
     public RegistreraAliens(InfDB databas) {
+        // setComboBox();
         initComponents();
+        ValjaRasArv.setVisible(false);
+        ValdRasSpec.setVisible(false);
+        behoverArv = false;
         idb = databas;
         
 
     }
-    public boolean kollaAgentOmrade(String omrade, String Agent){
-        boolean truea = false;
-        String SQLomrade = "select omrades_id from omrade where omrades_id = '" + omrade + "';";
-        String SQLAgent = "select agent_id from agent where namn = '" + Agent + "';";
+    
+    public boolean kollAgent(){
+        boolean finnsAgent = false;
+        
+        String SQLAgent = "select agent_id from agent where agent_id = '" + agent + "';";
         try{
-            String kolla1 = idb.fetchSingle(SQLomrade);
-            System.out.println();
-            String kolla2= idb.fetchSingle(SQLAgent);
-            if(!kolla1.isEmpty() || !kolla2.isEmpty() || kolla1.equals(omrade) || kolla2.equals(Agent) ){
-                truea = true;
+            String kolla= idb.fetchSingle(SQLAgent);
+            if(!kolla.isEmpty() && kolla.equals(agent)){
+                finnsAgent = true;
             }
-            System.out.println();
-        } catch (InfException e){
-            
+        } catch (InfException e){ // är denna nödvändig 
+            JOptionPane.showMessageDialog(null, "Finns ingen agent med det IDt");
+        } catch (java.lang.NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "Finns ingen agent med det IDt");
         }
-        return truea;
+        
+        return finnsAgent;
+    }
+    
+        public boolean kollaOmrade(){
+        boolean finnsAgent = false;
+        
+        String SQLomrade = "select omrades_id from omrade where omrades_id = '" + omrade + "';";
+        try{
+            String kolla= idb.fetchSingle(SQLomrade);
+            if(!kolla.isEmpty() && kolla.equals(omrade)){
+                finnsAgent = true;
+            }
+        } catch (InfException e){ // är denna nödvändig 
+            JOptionPane.showMessageDialog(null, "Finns inget område med det IDt");
+        } catch (java.lang.NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "Finns ingen agent med det IDt");
+        }
+        return finnsAgent;
     }
 
+//    public void setComboBox(){
+//        jComboBox1.addItem("Ingen ras");
+//        jComboBox1.addIt  em("BOGLODITE");
+//        jComboBox1.addItem("SQUID");
+//        jComboBox1.addItem("WORM"); 
+//    }
+    
+    public void laggTillAlien(){
+        String datumet = formatter.format(datum);
+        char[] losenord = jPasswordField1.getPassword();
+        losen = String.valueOf(losenord);  
+        agent = jTextField4.getText();
+        omrade = jTextField3.getText();
+        
+        if(kollAgent() && kollaOmrade() && Validering.passwordSix(jPasswordField1)){   
+            try{
+            String maxa = idb.fetchSingle("select count(Alien_id) from Alien");
+            max = Integer.parseInt(maxa) + 1;
+            String insert = "INSERT INTO Alien (Alien_ID, registreringsdatum, losenord,namn, telefon ,plats, ansvarig_agent) Values(" + max +  ", '" + datumet + "', '" + losen + "', '" + jTextField1.getText() + "', '" + jTextField2.getText()
+                   +"', '" + jTextField3.getText() + "', '" +jTextField4.getText()+"')";  
+            
+            idb.insert(insert);
+            } catch (InfException e) {
+                
+            }
+        }
+    }
+    
+    public void laggTillAlienMedArv(){
+        String sqlFragan;
+        if(!jComboBox1.getSelectedItem().toString().equals("WORM") && Validering.convertStringToInt(ValjaRasArv)){
+            rasArvInput = Integer.parseInt(ValjaRasArv.getText());
+            sqlFragan = "insert into "  + jComboBox1.getSelectedItem().toString() + " values("+max+", " + rasArvInput + ")";
+        } else {
+            sqlFragan = "insert into "  + jComboBox1.getSelectedItem().toString() + " values("+max+ ")";
+        }
+        
+        try{
+            idb.insert(sqlFragan);
+        } catch (InfException e) {
+            
+        }
+    }
+    
+    public void setAlienRas(String ras){
+        if(ras.equals("BOGLODITE")){    
+            ValdRasSpec.setText("Ange antal Boogies");
+            getRasArv = ValjaRasArv.getText();
+        } else {
+            ValdRasSpec.setText("Ange antal armar");
+            getRasArv = ValjaRasArv.getText();
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -70,14 +154,14 @@ public class RegistreraAliens extends javax.swing.JPanel {
         jTextField3 = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
+        ValdRasSpec = new javax.swing.JLabel();
+        ValjaRasArv = new javax.swing.JTextField();
 
         jTextField1.setColumns(6);
 
         jLabel5.setText("Ansvarig agent");
 
         jLabel2.setText("Namn");
-
-        jPasswordField1.setText("jPasswordField1");
 
         jTextField2.setColumns(6);
 
@@ -100,52 +184,74 @@ public class RegistreraAliens extends javax.swing.JPanel {
 
         jTextField3.setColumns(6);
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ingen ras", "BOGLODITE", "SQUID", "WORM" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
         jLabel7.setText("Ras");
+
+        ValjaRasArv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ValjaRasArvActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel5)
-                        .addComponent(jLabel2)
-                        .addComponent(jLabel3)
-                        .addComponent(jLabel4)
-                        .addComponent(jLabel1))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addComponent(jLabel7)))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(83, 83, 83)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ValdRasSpec, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(71, 71, 71)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(53, 53, 53)
+                                .addComponent(jLabel7)))
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton1)
                             .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(83, 83, 83)
-                .addComponent(jLabel6)
-                .addContainerGap(89, Short.MAX_VALUE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jPasswordField1, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                        .addComponent(ValjaRasArv, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(38, 38, 38))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ValdRasSpec, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
+                    .addComponent(jLabel7)
+                    .addComponent(ValjaRasArv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -173,32 +279,42 @@ public class RegistreraAliens extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        String datumet = formatter.format(datum);
-        char[] losenord = jPasswordField1.getPassword();
-        String losen = String.valueOf(losenord);  
-        String agent = jTextField4.getText();
-        String område = jTextField3.getText();
-        
-        if(!kollaAgentOmrade(område, agent)){
-            System.out.println("Agent eller område är tomt, vilket det inte får vara då de e en FK");    
-        
-        } else {
-            try{
-            String maxa = idb.fetchSingle("select count(Alien_id) from Alien");
-            int max = Integer.parseInt(maxa) + 1;
-            String insert = "INSERT INTO Alien (Alien_ID, registreringsdatum, losenord,namn, telefon ,plats, ansvarig_agent) Values(" + max +  ", '" + datumet + "', '" + losen + "', '" + jTextField1.getText() + "', '" + jTextField2.getText()
-                   +"', '" + jTextField3.getText() + "', '" +jTextField4.getText()+"')";  
+        if(!jComboBox1.getSelectedItem().equals("Ingen ras")){
+            if(Validering.convertStringToInt(ValjaRasArv)){
+                laggTillAlien();
+                laggTillAlienMedArv();
             
-            idb.insert(insert);
-            } catch (InfException e) {
-                System.out.println("Det blev fel här");
-            }
+            } 
+        } else {
+            laggTillAlien();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+    
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // CB
+         if(jComboBox1.getSelectedItem().equals("Ingen ras") || jComboBox1.getSelectedItem().equals("WORM")) {
+            ValjaRasArv.setVisible(false);
+            ValdRasSpec.setVisible(false);
+            getRasArv = "";
+            
+        } else {
+            ValjaRasArv.setVisible(true);
+            ValdRasSpec.setVisible(true);
+            ValjaRasArv.setText("");
+            setAlienRas(jComboBox1.getSelectedItem().toString());
+            behoverArv = true;
+        }
+    
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void ValjaRasArvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValjaRasArvActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ValjaRasArvActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel ValdRasSpec;
+    private javax.swing.JTextField ValjaRasArv;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;

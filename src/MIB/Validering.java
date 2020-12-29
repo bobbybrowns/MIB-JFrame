@@ -50,6 +50,28 @@ public class Validering {
         return resultat;
     }
 
-
-
+    public static boolean convertStringToInt(JTextField ValjaRasArv){
+       boolean resultat = true;
+       
+       try{   
+           Integer.parseInt(ValjaRasArv.getText());
+           if(Integer.parseInt(ValjaRasArv.getText()) <= 0) {
+            resultat = false;
+                JOptionPane.showMessageDialog(null, "Du måste ha ett värde som är större än 0.");
+           }
+       } catch (NumberFormatException e) {
+           resultat = false;
+           JOptionPane.showMessageDialog(null, "Ange ett heltal.");
+       }
+        return resultat;
+    }
+    
+    public static boolean passwordSix(JPasswordField e){
+        boolean sant = true;
+        if(e.getText().length() > 6){
+            sant = false;
+            JOptionPane.showMessageDialog(null, "Ditt lösenord måste vara mindre 7");
+        }
+        return sant;
+    }
 }

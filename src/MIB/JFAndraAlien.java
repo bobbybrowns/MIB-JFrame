@@ -20,10 +20,10 @@ public class JFAndraAlien extends javax.swing.JFrame {
     /**
      * Creates new form JFAndraAlien
      */
-    public JFAndraAlien() {
-        //idb = databas;
+    public JFAndraAlien(InfDB databas) {
+        idb = databas;
         initComponents();
-        andraAlien = new AndraAlien();
+        andraAlien = new AndraAlien(idb);
         pnlAndraAlien.setLayout(new BorderLayout());
         pnlAndraAlien.add(andraAlien);
     }
@@ -96,7 +96,7 @@ public class JFAndraAlien extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JFAndraAlien().setVisible(true);
+                new JFAndraAlien(idb).setVisible(true);
             }
         });
     }

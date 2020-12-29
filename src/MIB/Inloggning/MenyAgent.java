@@ -46,8 +46,9 @@ public class MenyAgent extends javax.swing.JPanel {
         andraLosen = new AndraLosenord(idb);
         regAlien = new JFRegistreraAliens(idb);
         regUtrustning = new JFRegistreraUtrustning();
-        andraAlien = new JFAndraAlien();
+        andraAlien = new JFAndraAlien(idb);
         visaChefOmrade = new JFVisaChefOmrade(idb);
+        visaAlienOmrade = new JFVisaAlienOmrade(idb);
         //mainFrame = new MainFrame(idb);
     }
 
@@ -210,7 +211,7 @@ public class MenyAgent extends javax.swing.JPanel {
 
     private void btnAndraAlienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAndraAlienActionPerformed
         // TODO add your handling code here:
-        andraAlien = new JFAndraAlien();
+        andraAlien = new JFAndraAlien(idb);
         andraAlien.setVisible(true);
     }//GEN-LAST:event_btnAndraAlienActionPerformed
 
@@ -222,7 +223,7 @@ public class MenyAgent extends javax.swing.JPanel {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        visaAlienOmrade = new JFVisaAlienOmrade();
+        visaAlienOmrade = new JFVisaAlienOmrade(idb);
         visaAlienOmrade.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
