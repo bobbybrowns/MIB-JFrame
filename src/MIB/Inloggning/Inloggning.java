@@ -5,7 +5,9 @@
  */
 package MIB.Inloggning;
 
-import MIB.MainFrame;
+import MIB.MainFrameAgent;
+import MIB.MainFrameAdmin;
+import MIB.MainFrameAlien_1;
 import MIB.Validering;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +24,8 @@ public class Inloggning extends javax.swing.JPanel {
     
     private InfDB idb;
     private static int behorighet;
+    MainFrameAgent mainFrame;
+    MainFrameAdmin mainAlien;
     
 
     /**
@@ -29,6 +33,7 @@ public class Inloggning extends javax.swing.JPanel {
      * @param databas
      */
     public Inloggning(InfDB databas) {
+        
         behorighet = 0;
         try{
          
@@ -173,7 +178,18 @@ public class Inloggning extends javax.swing.JPanel {
         String anv = tfAnvandarnamn.getText();
         char[] los = tfLosenord.getPassword();
         String str = String.valueOf(los);
+        
+        // Kontroll av Admin-status
         boolean isAdmin = false;
+        String adminFraga = "SELECT administrator from agent where namn = '" + anv + "'";
+        try{
+        String adminKoll = idb.fetchSingle(adminFraga);
+        } catch (InfException exe) {
+            JOptionPane.showMessageDialog(null, "Hittade ej admin-status");
+        }
+        if(adminFraga == "J"){
+        isAdmin = true;
+        }
         
         if(behorighet == 1){
          sqlF = "select losenord from agent where namn = '" + anv + "'";
@@ -195,8 +211,9 @@ public class Inloggning extends javax.swing.JPanel {
           try {
 
             nam = idb.fetchSingle(sqlF);
-            new MainFrame(idb).setVisible(true);
-            //LggaIn(idb).setVisible(false);
+            
+            
+            
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Felmeddelande!");
         }
@@ -205,7 +222,16 @@ public class Inloggning extends javax.swing.JPanel {
         }
         if(str.equals(nam)){
          JOptionPane.showMessageDialog(null, "Inloggad!");
-         //new HuvudFonster(idb).setVisible(true);
+         System.out.println(behorighet);
+            if(behorighet == 1){
+            new MainFrameAgent(idb).setVisible(true);
+            }
+            else if(behorighet == 2){
+            new MainFrameAlien_1(idb).setVisible(true);
+            }
+            else if(behorighet ==3){
+            new MainFrameAdmin().setVisible(true);
+            }
         }
         else{
         JOptionPane.showMessageDialog(null, "Fel lösenord!");
@@ -222,24 +248,27 @@ public class Inloggning extends javax.swing.JPanel {
     private void rbAgentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbAgentActionPerformed
         // TODO add your handling code here:
         
-        behorighet = 1;
+        
         rbAdmin.setSelected(false);
         rbAlien.setSelected(false);
+        behorighet = 1;
         
     }//GEN-LAST:event_rbAgentActionPerformed
 
     private void rbAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbAdminActionPerformed
         // TODO add your handling code here:
-        behorighet = 3;
+        
         rbAgent.setSelected(false);
         rbAlien.setSelected(false);
+        behorighet = 3;
     }//GEN-LAST:event_rbAdminActionPerformed
 
     private void rbAlienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbAlienActionPerformed
         // TODO add your handling code here:
-        behorighet = 2;
+        
         rbAdmin.setSelected(false);
         rbAgent.setSelected(false);
+        behorighet = 2;
     }//GEN-LAST:event_rbAlienActionPerformed
 
 

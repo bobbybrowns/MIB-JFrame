@@ -24,7 +24,7 @@ public class JFVisaAlienOmrade extends javax.swing.JFrame {
     public JFVisaAlienOmrade(InfDB datbas) {
         idb = datbas;
         initComponents();
-        visaAlienOmrade = new VisaAlienOmrade(idb);
+        visaAlienOmrade = new VisaAlienOmrade();
         pnlVisaAlienOmrade.setLayout(new BorderLayout());
         pnlVisaAlienOmrade.add(visaAlienOmrade);
     }
