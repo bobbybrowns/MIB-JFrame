@@ -78,7 +78,7 @@ public class MainFrameAgent extends javax.swing.JFrame {
         jlpMenyVisaPanel = new javax.swing.JLayeredPane();
         jlpHuvudPanel = new javax.swing.JLayeredPane();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(700, 500));
 
         javax.swing.GroupLayout jlpMenyVisaPanelLayout = new javax.swing.GroupLayout(jlpMenyVisaPanel);

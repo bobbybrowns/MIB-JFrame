@@ -40,7 +40,7 @@ public class MainFrameAlien_1 extends javax.swing.JFrame {
         pnlAlienMeny = new javax.swing.JPanel();
         pnlAlienHuvudPanel = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         javax.swing.GroupLayout pnlAlienMenyLayout = new javax.swing.GroupLayout(pnlAlienMeny);
         pnlAlienMeny.setLayout(pnlAlienMenyLayout);

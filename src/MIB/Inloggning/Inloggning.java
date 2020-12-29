@@ -175,21 +175,21 @@ public class Inloggning extends javax.swing.JPanel {
         // TODO add your handling code here:
         String nam = "";
         String sqlF = "";
+        String adminKoll = "" ;
         String anv = tfAnvandarnamn.getText();
         char[] los = tfLosenord.getPassword();
         String str = String.valueOf(los);
         
         // Kontroll av Admin-status
-        boolean isAdmin = false;
-        String adminFraga = "SELECT administrator from agent where namn = '" + anv + "'";
+        String adminSqlFraga = "SELECT administrator from agent where namn = '" + anv + "'";
         try{
-        String adminKoll = idb.fetchSingle(adminFraga);
+        adminKoll = idb.fetchSingle(adminSqlFraga);
         } catch (InfException exe) {
             JOptionPane.showMessageDialog(null, "Hittade ej admin-status");
         }
-        if(adminFraga == "J"){
-        isAdmin = true;
-        }
+
+        
+        
         
         if(behorighet == 1){
          sqlF = "select losenord from agent where namn = '" + anv + "'";
@@ -197,15 +197,12 @@ public class Inloggning extends javax.swing.JPanel {
         else if(behorighet == 2){
         sqlF = "select losenord from alien where namn = '" + anv + "'";
         }
-        else if(behorighet == 3 && isAdmin == true){
+        else if(behorighet == 3  && adminKoll.equals("J")){
         sqlF = "select losenord from agent where namn = '" + anv + "'";
         }
         else{
         JOptionPane.showMessageDialog(null, "Välj roll");
         }
-        if(behorighet == 3){
-            
-         }
         
        if(Validering.passwordFieldHarVarde(tfLosenord)){
           try {
@@ -222,7 +219,7 @@ public class Inloggning extends javax.swing.JPanel {
         }
         if(str.equals(nam)){
          JOptionPane.showMessageDialog(null, "Inloggad!");
-         System.out.println(behorighet);
+         
             if(behorighet == 1){
             new MainFrameAgent(idb).setVisible(true);
             }

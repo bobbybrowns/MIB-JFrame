@@ -39,7 +39,7 @@ public class MainFrameAdmin extends javax.swing.JFrame {
         pnlAdminMeny = new javax.swing.JPanel();
         pnlAdminHuvudPanel = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         javax.swing.GroupLayout pnlAdminMenyLayout = new javax.swing.GroupLayout(pnlAdminMeny);
         pnlAdminMeny.setLayout(pnlAdminMenyLayout);
