@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 import java.util.HashMap;
+
+
 /**
  *
  * @author Hampus
@@ -23,6 +25,7 @@ public class AndraAlien extends javax.swing.JPanel {
     private boolean platsHarVarde;
     private boolean arvHarVarde;
     private boolean losenordHarVarde;
+
     
     
     
@@ -40,28 +43,62 @@ public class AndraAlien extends javax.swing.JPanel {
         sqlUpdate = new HashMap<>();
         
         
+        
         settAlienID();
         setRas();
         setPlats();  
     }
     
     public void uppdateraAlien(){
-        
+        String sqlQ;
+        sqlUpdate = setValue();
+        for(String i : sqlUpdate.keySet()){
+            sqlQ = " " + i + " = '" + sqlUpdate.get(i) + "' ,";
+        }
+        System.out.println();
+        // update alien set 'boleantyp' = 'textvärdefältet' where alien_id  = cbbox1;
     }
     
-    public HashMap setValue() {
+    
+    public void setBooleans(){
+        if(!tfNamn.getText().isEmpty()){
+            namnHarVarde = true;
+            System.out.println(namnHarVarde);
+        } 
+        
+        if(!tfTelefon.getText().isEmpty()){
+            telefonHarVarde = true;
+        } else {
+            telefonHarVarde = false;
+        }
+        
+        char[] password = pfLosenord.getPassword();
+        String losen = String.valueOf(password);
+        if(!losen.isEmpty() && Validering.passwordSix(pfLosenord)){
+            losenordHarVarde = true;
+        } else {
+            losenordHarVarde = false;
+        }
+    }
+    public HashMap setValue() {   
+        setBooleans();
+        
         sqlUpdate.put("NAMN",namnHarVarde);
-        sqlUpdate.put("TELEFON",telefonHarVarde);
+        sqlUpdate.put("TELEFON,",telefonHarVarde);
         sqlUpdate.put("LOSENORD",losenordHarVarde);
         sqlUpdate.put("PLATS",platsHarVarde);
         sqlUpdate.put("RAS",rasHarVarde);
         sqlUpdate.put(jComboBox1.getSelectedItem().toString(),arvHarVarde);
         
         for(String key : sqlUpdate.keySet()){
-            if(!sqlUpdate.get(key)){
-                sqlUpdate.remove(key);
+            System.out.println(sqlUpdate.get(key));
+            if(sqlUpdate.get(key) == false){
+                sqlUpdate.entrySet().remove(key);
+            } else {
+                
             }
         }
+    
         
         return sqlUpdate;
     }
@@ -106,7 +143,7 @@ public class AndraAlien extends javax.swing.JPanel {
         }
     }
      
-    // update alien set 'boleantyp' = 'textvärdefältet' where alien_id  = cbbox1;
+    
 
     
     /**
@@ -317,34 +354,21 @@ public class AndraAlien extends javax.swing.JPanel {
 
     private void btnSparaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSparaActionPerformed
         
+        System.out.println(sqlUpdate);
             
         
     }//GEN-LAST:event_btnSparaActionPerformed
 
     private void tfNamnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNamnActionPerformed
-        if(!tfNamn.getText().isEmpty()){
-            namnHarVarde = true;
-        } else {
-            namnHarVarde = false;
-        }
+       
     }//GEN-LAST:event_tfNamnActionPerformed
 
     private void tfTelefonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfTelefonActionPerformed
-        if(!tfTelefon.getText().isEmpty()){
-            telefonHarVarde = true;
-        } else {
-            telefonHarVarde = false;
-        }
+
     }//GEN-LAST:event_tfTelefonActionPerformed
 
     private void pfLosenordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pfLosenordActionPerformed
-        char[] password = pfLosenord.getPassword();
-        String losen = String.valueOf(password);
-        if(!losen.isEmpty() && Validering.passwordSix(pfLosenord)){
-            losenordHarVarde = true;
-        } else {
-            losenordHarVarde = false;
-        }
+
     }//GEN-LAST:event_pfLosenordActionPerformed
 
     private void jArvInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jArvInputActionPerformed
