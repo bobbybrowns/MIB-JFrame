@@ -281,14 +281,19 @@ public class AndraAlien extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void cbPlatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPlatsActionPerformed
+        try{
         if(!cbPlats.getSelectedItem().equals("-")){
             platsHarVarde = true;
         } else {
             platsHarVarde = false;
         }
+        } catch (NullPointerException e) {
+            
+        }
     }//GEN-LAST:event_cbPlatsActionPerformed
 
     private void cbRasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRasActionPerformed
+        try{
         if(!cbPlats.getSelectedItem().equals("-")){
            rasHarVarde = true;
            jArv.setVisible(true);
@@ -303,6 +308,9 @@ public class AndraAlien extends javax.swing.JPanel {
             }
         } else {
             rasHarVarde = false;
+        } 
+        } catch (NullPointerException e) {
+            
         }
 
     }//GEN-LAST:event_cbRasActionPerformed
