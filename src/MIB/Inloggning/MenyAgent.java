@@ -15,7 +15,7 @@ import MIB.JFVisaAlienOmrade;
 import MIB.JFVisaAlienRas;
 import MIB.JFVisaAllInfoAlien;
 import MIB.JFVisaChefOmrade;
-import MIB.MainFrame;
+import MIB.MainFrameAgent;
 import javax.swing.JFrame;
 import oru.inf.InfDB;
 
@@ -25,7 +25,7 @@ import oru.inf.InfDB;
  */
 public class MenyAgent extends javax.swing.JPanel {
     AndraLosenord andraLosen;
-    MainFrame mainFrame;
+    MainFrameAgent mainFrame;
     JFRegistreraAliens regAlien;
     JFRegistreraUtrustning regUtrustning;
     JFAndraAlien andraAlien;
@@ -49,7 +49,7 @@ public class MenyAgent extends javax.swing.JPanel {
         andraAlien = new JFAndraAlien(idb);
         visaChefOmrade = new JFVisaChefOmrade(idb);
         visaAlienOmrade = new JFVisaAlienOmrade(idb);
-        //mainFrame = new MainFrame(idb);
+        //mainFrame = new MainFrameAgent(idb);
     }
 
     /**

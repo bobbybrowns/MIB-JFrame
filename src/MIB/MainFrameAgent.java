@@ -6,6 +6,7 @@
 package MIB;
  
 import MIB.Inloggning.Inloggning;
+import static MIB.Inloggning.Inloggning.getBehorighet;
 import MIB.Inloggning.MenyAdmin;
 import MIB.Inloggning.MenyAgent;
 import MIB.Inloggning.MenyAlien;
@@ -20,7 +21,7 @@ import oru.inf.InfDB;
  *
  * @author Hampus
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrameAgent extends javax.swing.JFrame {
     private static InfDB idb;
     public boolean inloggad = false;
     Inloggning inloggning;
@@ -30,12 +31,12 @@ public class MainFrame extends javax.swing.JFrame {
     AndraLosenord andraLosen;
     VisaChefForValtOmrade visaChef;
     RegistreraAliens regAliens;
-    MainFrame mainFrame;
-    int behorighet;
+    MainFrameAgent mainFrame;
+    public int behorighet;
     /**
      * Creates new form MainFrame
      */
-    public MainFrame(InfDB databas) {
+    public MainFrameAgent(InfDB databas) {
         idb = databas;
         initComponents();
         behorighet = MIB.Inloggning.Inloggning.getBehorighet();
@@ -45,79 +46,25 @@ public class MainFrame extends javax.swing.JFrame {
         andraLosen = new AndraLosenord(idb);
         visaChef = new VisaChefForValtOmrade(idb);
         regAliens = new RegistreraAliens(idb);
-        visaInnehall();
+        
+        visaInnehallAgent();
+      
         
         
     }
     
 
 // Ska ändra innehåller i jlpHuvudPanel till AndraLosenord (JPanel)
-    public void visaInnehall(){
-        if(behorighet == 1){
+    public void visaInnehallAgent(){
+        
         jlpMenyVisaPanel.setLayout(new BorderLayout());
         jlpMenyVisaPanel.add(agentMeny, BorderLayout.NORTH);
-        }
-        else if(behorighet == 2){
+    }
+    
+    public void visaInnehallAlien(){
         jlpMenyVisaPanel.setLayout(new BorderLayout());
         jlpMenyVisaPanel.add(alienMeny, BorderLayout.NORTH);
-        }
-        else if(behorighet == 3){
-        jlpMenyVisaPanel.setLayout(new BorderLayout());
-        jlpMenyVisaPanel.add(adminMeny, BorderLayout.NORTH);
-        
-        }
-//        jlpHuvudPanel.setLayout(new BorderLayout());
-//        jlpHuvudPanel.add(inloggning, BorderLayout.NORTH);
-////        jlpMenyVisaPanel.setLayout(new BorderLayout());
-////        jlpMenyVisaPanel.add(agentMeny, BorderLayout.NORTH);
-        
     }
-    
-    public void rensaInnehall(){
-       jlpHuvudPanel.removeAll();
-       jlpHuvudPanel.repaint();
-       jlpHuvudPanel.invalidate();
-       jlpHuvudPanel.revalidate();
-       
-        
-    }
-    
-    public void visaChef(){
-        jlpHuvudPanel.removeAll();
-        jlpHuvudPanel.setLayout(new BorderLayout());
-        jlpHuvudPanel.add(visaChef, BorderLayout.NORTH);
-        jlpHuvudPanel.invalidate();
-        jlpHuvudPanel.repaint();
-        jlpHuvudPanel.revalidate();
-//        jlpMenyVisaPanel.setLayout(new BorderLayout());
-//        jlpMenyVisaPanel.add(agentMeny, BorderLayout.NORTH);
-//        mainFrame = new MainFrame(idb);
-//        //visaChef = new VisaChefForValtOmrade(idb);
-//        jlpHuvudPanel.remove(regAliens);
-//        mainFrame.removeAll();
-//        revalidate();
-       
-         //andraLosen = new AndraLosenord(idb);
-//        MainFrame mainFrame = new MainFrame(idb);
-//        jlpHuvudPanel = new javax.swing.JLayeredPane();
-//        visaChef = new VisaChefForValtOmrade(idb);
-//        visaChef.move
-//         visaChef.setLayout(new BorderLayout());
-//        visaChef.add(regAliens, BorderLayout.NORTH);
-//      mainFrame.remove(jlpHuvudPanel);
-//        //jlpHuvudPanel.add(visaChef, BorderLayout.NORTH);
-//        mainFrame.getContentPane().remove(jlpHuvudPanel);
-//        mainFrame.getContentPane().add(visaChef);
-//        mainFrame.invalidate();
-//        mainFrame.validate();
-        //jlpHuvudPanel.dispose();
-        
-
-    }
-//    public void andraInloggadStatus(){
-//    inloggad = true;
-//    
-//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -131,7 +78,7 @@ public class MainFrame extends javax.swing.JFrame {
         jlpMenyVisaPanel = new javax.swing.JLayeredPane();
         jlpHuvudPanel = new javax.swing.JLayeredPane();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(700, 500));
 
         javax.swing.GroupLayout jlpMenyVisaPanelLayout = new javax.swing.GroupLayout(jlpMenyVisaPanel);
@@ -191,20 +138,20 @@ public class MainFrame extends javax.swing.JFrame {
 //                }
 //            }
 //        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(MainFrameAgent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(MainFrameAgent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(MainFrameAgent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(MainFrameAgent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        //</editor-fold>
 //
 //        /* Create and display the form */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                new MainFrame().setVisible(true);
+//                new MainFrameAgent().setVisible(true);
 //            }
 //        });
     

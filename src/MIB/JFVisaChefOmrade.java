@@ -40,7 +40,7 @@ public class JFVisaChefOmrade extends javax.swing.JFrame {
 
         pnlVisaChefOmrade = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         javax.swing.GroupLayout pnlVisaChefOmradeLayout = new javax.swing.GroupLayout(pnlVisaChefOmrade);
         pnlVisaChefOmrade.setLayout(pnlVisaChefOmradeLayout);
