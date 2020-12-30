@@ -43,6 +43,7 @@ public class MenyAgent extends javax.swing.JPanel {
     public MenyAgent(InfDB databas) {
         initComponents();
         idb = databas;
+        visaAllInfoAlien = new JFVisaAllInfoAlien(idb);
         andraLosen = new AndraLosenord(idb);
         regAlien = new JFRegistreraAliens(idb);
         regUtrustning = new JFRegistreraUtrustning();
@@ -229,13 +230,13 @@ public class MenyAgent extends javax.swing.JPanel {
 
     private void btnVisaAlienRasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisaAlienRasActionPerformed
         // TODO add your handling code here:
-        visaAlienRas = new JFVisaAlienRas();
+        visaAlienRas = new JFVisaAlienRas(idb);
         visaAlienRas.setVisible(true);
     }//GEN-LAST:event_btnVisaAlienRasActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        visaAllInfoAlien = new JFVisaAllInfoAlien();
+        visaAllInfoAlien = new JFVisaAllInfoAlien(idb);
         visaAllInfoAlien.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

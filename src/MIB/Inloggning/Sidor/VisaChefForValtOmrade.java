@@ -48,7 +48,7 @@ public class VisaChefForValtOmrade extends javax.swing.JPanel {
         }
         
         catch(Exception undantag){
-        JOptionPane.showMessageDialog(null, "Något annat felar");
+        //JOptionPane.showMessageDialog(null, "Något annat felar");
         }
         
     }

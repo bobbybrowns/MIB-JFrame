@@ -7,6 +7,7 @@ package MIB.Inloggning;
 
 import MIB.Inloggning.Sidor.AndraLosenord;
 import MIB.JFAndraAlien;
+import MIB.JFGeAgentAdmin;
 import MIB.JFRegistreraAliens;
 import MIB.JFRegistreraUtrustning;
 import MIB.JFSokAliensMellanDatum;
@@ -32,6 +33,7 @@ public class MenyAdmin extends javax.swing.JPanel {
     JFVisaAlienRas visaAlienRas;
     JFVisaAllInfoAlien visaAllInfoAlien;
     JFVisaChefOmrade visaChefOmrade;
+    JFGeAgentAdmin geAgentAdmin;
     
     private static InfDB idb;
 
@@ -47,6 +49,7 @@ public class MenyAdmin extends javax.swing.JPanel {
         andraAlien = new JFAndraAlien(idb);
         visaChefOmrade = new JFVisaChefOmrade(idb);
         visaAlienOmrade = new JFVisaAlienOmrade(idb);
+        geAgentAdmin = new JFGeAgentAdmin(idb);
     }
 
     /**
@@ -69,7 +72,7 @@ public class MenyAdmin extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         btnVisaChefOmrade = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        btnGeAgentAdmin = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
@@ -151,8 +154,8 @@ public class MenyAdmin extends javax.swing.JPanel {
                     .addComponent(jButton4)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(btnAndraAlien)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(btnAndraAlien)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,7 +199,12 @@ public class MenyAdmin extends javax.swing.JPanel {
 
         jButton7.setText("> Registrera Agent");
 
-        jButton8.setText(">Ge agent adminstatus");
+        btnGeAgentAdmin.setText("Ge agent adminstatus");
+        btnGeAgentAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGeAgentAdminActionPerformed(evt);
+            }
+        });
 
         jButton9.setText(">Ändra Agent ");
         jButton9.addActionListener(new java.awt.event.ActionListener() {
@@ -224,14 +232,14 @@ public class MenyAdmin extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton9)
-                    .addComponent(jButton8)
+                    .addComponent(btnGeAgentAdmin)
                     .addComponent(jButton1)
                     .addComponent(jButton6)
                     .addComponent(jButton5)
                     .addComponent(jButton7)
                     .addComponent(jButton10)
                     .addComponent(jButton11))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,7 +250,7 @@ public class MenyAdmin extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton8)
+                .addComponent(btnGeAgentAdmin)
                 .addGap(24, 24, 24)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -295,13 +303,13 @@ public class MenyAdmin extends javax.swing.JPanel {
 
     private void btnVisaAlienRasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisaAlienRasActionPerformed
         // TODO add your handling code here:
-        visaAlienRas = new JFVisaAlienRas();
+        visaAlienRas = new JFVisaAlienRas(idb);
         visaAlienRas.setVisible(true);
     }//GEN-LAST:event_btnVisaAlienRasActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        visaAllInfoAlien = new JFVisaAllInfoAlien();
+        visaAllInfoAlien = new JFVisaAllInfoAlien(idb);
         visaAllInfoAlien.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -315,9 +323,16 @@ public class MenyAdmin extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton9ActionPerformed
 
+    private void btnGeAgentAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeAgentAdminActionPerformed
+        // TODO add your handling code here:
+        geAgentAdmin = new JFGeAgentAdmin(idb);
+        geAgentAdmin.setVisible(true);
+    }//GEN-LAST:event_btnGeAgentAdminActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAndraAlien;
+    private javax.swing.JButton btnGeAgentAdmin;
     private javax.swing.JButton btnRegistreraAliens;
     private javax.swing.JButton btnRegistreraUtrustning;
     private javax.swing.JButton btnSokAliensDatum;
@@ -332,7 +347,6 @@ public class MenyAdmin extends javax.swing.JPanel {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables

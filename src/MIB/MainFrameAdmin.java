@@ -19,9 +19,10 @@ public class MainFrameAdmin extends javax.swing.JFrame {
     /**
      * Creates new form MainFrameAlien
      */
-    public MainFrameAdmin() {
-        //idb = databas;
+    public MainFrameAdmin(InfDB databas) {
+        idb = databas;
         initComponents();
+        // Fel uppstår här
         adminMeny = new MenyAdmin(idb);
         pnlAdminMeny.setLayout(new BorderLayout());
         pnlAdminMeny.add(adminMeny);

@@ -5,17 +5,101 @@
  */
 package MIB.Inloggning.Sidor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.swing.JOptionPane;
+import oru.inf.InfDB;
+import oru.inf.InfException;
+
 /**
  *
  * @author Hampus
  */
 public class VisaAlienRas extends javax.swing.JPanel {
+    private InfDB idb;
 
     /**
      * Creates new form VisaAlienRas
      */
-    public VisaAlienRas() {
+    public VisaAlienRas(InfDB databas) {
         initComponents();
+        idb = databas;
+        sattVardeCbValjRas();
+    }
+    
+    private void sattVardeCbValjRas(){
+    
+    cbValjRas.addItem("Ingen ras");
+    cbValjRas.addItem("Boglodite");
+    cbValjRas.addItem("Squid");
+    cbValjRas.addItem("Worm");
+    
+    }
+    
+    private void printInfo(){
+        
+        taResultat.setText("");
+    
+        String valdRas = cbValjRas.getSelectedItem().toString();
+        
+        try{
+            
+            if(valdRas.equals("Boglodite")) {
+                
+                ArrayList<HashMap<String, String>> boglodite = new ArrayList<>();
+            
+                String hamtaBoglodite = "select alien.NAMN, alien.TELEFON, omrade.BENAMNING from alien join omrade on omrade.OMRADES_ID = alien.PLATS join boglodite on boglodite.ALIEN_ID = alien.ALIEN_ID";
+                boglodite = idb.fetchRows(hamtaBoglodite);
+               
+                for(HashMap<String, String> skrivUtBoglodite : boglodite) {
+                   
+                    taResultat.append(skrivUtBoglodite.get("NAMN") + "\t");
+                    taResultat.append(skrivUtBoglodite.get("TELEFON") + "\t");
+                    taResultat.append(skrivUtBoglodite.get("BENAMNING") + "\n");
+                   
+               }
+            } else if(valdRas.equals("Squid")) {
+            
+                ArrayList<HashMap<String, String>> squid = new ArrayList<>();
+            
+                String hamtaSquid = "select alien.NAMN, alien.TELEFON, omrade.BENAMNING from alien join omrade on omrade.OMRADES_ID = alien.PLATS join squid on squid.ALIEN_ID = alien.ALIEN_ID";
+                squid = idb.fetchRows(hamtaSquid);
+               
+                for(HashMap<String, String> skrivUtSquid : squid) {
+                   
+                    taResultat.append(skrivUtSquid.get("NAMN") + "\t");
+                    taResultat.append(skrivUtSquid.get("TELEFON") + "\t");
+                    taResultat.append(skrivUtSquid.get("BENAMNING") + "\n");
+                   
+               }
+                
+            } else if(valdRas.equals("Worm")) {
+            
+                ArrayList<HashMap<String, String>> worm = new ArrayList<>();
+            
+                String hamtaWorm = "select alien.NAMN, alien.TELEFON, omrade.BENAMNING from alien join omrade on omrade.OMRADES_ID = alien.PLATS join worm on worm.ALIEN_ID = alien.ALIEN_ID";
+
+                worm = idb.fetchRows(hamtaWorm);
+               
+                for(HashMap<String, String> skrivUtWorm : worm) {
+                   
+                    taResultat.append(skrivUtWorm.get("NAMN") + "\t");
+                    taResultat.append(skrivUtWorm.get("TELEFON") + "\t");
+                    taResultat.append(skrivUtWorm.get("BENAMNING") + "\n");
+                   
+               }
+            }
+        }
+        
+        catch(InfException e) {
+             JOptionPane.showMessageDialog(null, "Databasfel");
+        }
+        catch(IndexOutOfBoundsException e) {
+             JOptionPane.showMessageDialog(null, "Något gick fel");
+        }
+        catch(NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "null-fel");
+        }
     }
 
     /**
@@ -31,7 +115,7 @@ public class VisaAlienRas extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         cbValjRas = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tfVisaRasAlien = new javax.swing.JTextArea();
+        taResultat = new javax.swing.JTextArea();
 
         jLabel1.setText("Visa alla aliens av en viss ras");
 
@@ -43,9 +127,9 @@ public class VisaAlienRas extends javax.swing.JPanel {
             }
         });
 
-        tfVisaRasAlien.setColumns(20);
-        tfVisaRasAlien.setRows(5);
-        jScrollPane1.setViewportView(tfVisaRasAlien);
+        taResultat.setColumns(20);
+        taResultat.setRows(5);
+        jScrollPane1.setViewportView(taResultat);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -83,6 +167,7 @@ public class VisaAlienRas extends javax.swing.JPanel {
 
     private void cbValjRasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbValjRasActionPerformed
         // TODO add your handling code here:
+        printInfo();
     }//GEN-LAST:event_cbValjRasActionPerformed
 
 
@@ -91,6 +176,6 @@ public class VisaAlienRas extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea tfVisaRasAlien;
+    private javax.swing.JTextArea taResultat;
     // End of variables declaration//GEN-END:variables
 }
