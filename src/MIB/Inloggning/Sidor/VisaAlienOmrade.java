@@ -5,17 +5,85 @@
  */
 package MIB.Inloggning.Sidor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.swing.JOptionPane;
+import oru.inf.InfDB;
+import oru.inf.InfException;
+
 /**
  *
  * @author Hampus
  */
 public class VisaAlienOmrade extends javax.swing.JPanel {
+    private InfDB idb;
 
     /**
      * Creates new form VisaAlienOmrade
      */
-    public VisaAlienOmrade() {
+    public VisaAlienOmrade(InfDB databas) {
+        idb = databas;
         initComponents();
+        sattVardeComboBox();
+        
+    }
+    
+    private void sattVardeComboBox(){
+        
+        String sqlF = "select omrades_id from omrade;";
+     
+        try{
+        
+             ArrayList<String> omraden;
+             
+             omraden = idb.fetchColumn(sqlF);
+            
+        for(String benamning : omraden) {
+            cbValjOmrade.addItem(benamning);
+            }
+        
+    }
+        catch(InfException e){
+        JOptionPane.showMessageDialog(null, "Databas felar");
+        }
+        
+        catch(Exception undantag){
+        //JOptionPane.showMessageDialog(null, "Något annat felar");
+        }
+        
+    }
+    
+    private void skrivUtInfo(){
+        
+    taVisaAlienInfo.setText("");
+       
+              ArrayList<HashMap<String, String>> sokAlien = new ArrayList<>();
+              
+        try{
+        
+        String omrades_id = cbValjOmrade.getSelectedItem().toString();
+      
+        String fraga = "select alien.NAMN, alien.TELEFON, omrade.BENAMNING from alien join omrade on alien.PLATS = omrade.OMRADES_ID where omrades_id = '" + omrades_id + "'"; 
+        sokAlien = idb.fetchRows(fraga);
+        
+        for(HashMap<String, String> alien : sokAlien) {
+
+                taVisaAlienInfo.append(alien.get("NAMN") + "\t");
+                taVisaAlienInfo.append(alien.get("TELEFON") + "\t");
+                taVisaAlienInfo.append(alien.get("BENAMNING") + "\n");
+            
+        }
+        }
+        catch(InfException e) {
+             JOptionPane.showMessageDialog(null, "Databasfel");
+        }
+        catch(IndexOutOfBoundsException e) {
+             JOptionPane.showMessageDialog(null, "Något gick fel");
+        }
+        catch(NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "null-fel");
+        }
+    
     }
 
     /**
@@ -37,7 +105,11 @@ public class VisaAlienOmrade extends javax.swing.JPanel {
 
         jLabel2.setText("Välj område:");
 
-        cbValjOmrade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbValjOmrade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbValjOmradeActionPerformed(evt);
+            }
+        });
 
         taVisaAlienInfo.setColumns(20);
         taVisaAlienInfo.setRows(5);
@@ -77,6 +149,11 @@ public class VisaAlienOmrade extends javax.swing.JPanel {
                 .addGap(66, 66, 66))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cbValjOmradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbValjOmradeActionPerformed
+        // TODO add your handling code here:
+        skrivUtInfo();
+    }//GEN-LAST:event_cbValjOmradeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

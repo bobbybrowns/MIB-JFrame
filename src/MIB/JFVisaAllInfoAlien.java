@@ -21,9 +21,10 @@ public class JFVisaAllInfoAlien extends javax.swing.JFrame {
     /**
      * Creates new form JFVisaAllInfoAlien
      */
-    public JFVisaAllInfoAlien() {
+    public JFVisaAllInfoAlien(InfDB databas) {
+        idb = databas;
         initComponents();
-        visaAllInfoAlien = new VisaAllInfoAlien();
+        visaAllInfoAlien = new VisaAllInfoAlien(idb);
         pnlVIsaAllInfoAlien.setLayout(new BorderLayout());
         pnlVIsaAllInfoAlien.add(visaAllInfoAlien);
     }

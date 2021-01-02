@@ -5,18 +5,116 @@
  */
 package MIB.Inloggning.Sidor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.swing.JOptionPane;
+import oru.inf.InfDB;
+import oru.inf.InfException;
+
 /**
  *
  * @author Hampus
  */
 public class VisaAllInfoAlien extends javax.swing.JPanel {
+    private InfDB idb;
 
     /**
      * Creates new form VisaAllInfoAlien
      */
-    public VisaAllInfoAlien() {
+    public VisaAllInfoAlien(InfDB databas) {
+        idb = databas;
         initComponents();
+        sattVardeCbValjRas();
     }
+    
+    private void sattVardeCbValjRas(){
+    
+    cbAlienRas.addItem("Ingen ras");
+    cbAlienRas.addItem("Boglodite");
+    cbAlienRas.addItem("Squid");
+    cbAlienRas.addItem("Worm");
+    
+    }
+    
+private void sattVardeCbValjIndivid(){
+    
+    cbAlienIndivid.removeAllItems();
+    
+    String valdRas = cbAlienRas.getSelectedItem().toString();
+    
+    try{
+        
+        if(valdRas.equals("Boglodite")) {
+            
+            String fragaBoglodite = "select alien.NAMN from alien join boglodite on boglodite.ALIEN_ID = alien.ALIEN_ID";
+
+            ArrayList<String> boglodite;
+             
+            boglodite = idb.fetchColumn(fragaBoglodite);
+            
+        for(String bogloditeNamn : boglodite) {
+            cbAlienIndivid.addItem(bogloditeNamn);
+        }
+        
+        } else if(valdRas.equals("Squid")) {
+            
+            String fragaSquid = "select alien.NAMN from alien join squid on squid.ALIEN_ID = alien.ALIEN_ID";
+            
+            ArrayList<String> squid;
+             
+            squid = idb.fetchColumn(fragaSquid);
+            
+        for(String squidNamn : squid) {
+            cbAlienIndivid.addItem(squidNamn);
+        }
+    
+    
+        } else if(valdRas.equals("Worm")) {
+            
+            String fragaWorm = "select alien.NAMN from alien join worm on worm.ALIEN_ID = alien.ALIEN_ID";
+            
+            ArrayList<String> worm;
+             
+            worm = idb.fetchColumn(fragaWorm);
+            
+        for(String wormNamn : worm) {
+            cbAlienIndivid.addItem(wormNamn);
+        }
+        
+        }
+    } catch (InfException e) {
+        JOptionPane.showMessageDialog(null, "InfException");
+        
+    } catch (NullPointerException e){
+        JOptionPane.showMessageDialog(null, "null-fel igen");
+    }
+    
+}
+
+private void printInfo(){
+    
+    taVisaAlienInfo.setText("");
+    
+    HashMap<String, String> hamtaInfo = new HashMap<String,String>();
+    
+    try{
+        
+        String valdIndivid = cbAlienIndivid.getSelectedItem().toString();
+        String sqlFraga = "select alien.NAMN, alien.REGISTRERINGSDATUM, alien.TELEFON, omrade.BENAMNING from alien join omrade on omrade.OMRADES_ID = alien.PLATS where alien.NAMN = '" + valdIndivid + "'";
+        hamtaInfo = idb.fetchRow(sqlFraga);
+        
+        taVisaAlienInfo.append(hamtaInfo.get("NAMN") + "\t");
+        taVisaAlienInfo.append(hamtaInfo.get("REGISTRERINGSDATUM") + "\t");
+        taVisaAlienInfo.append(hamtaInfo.get("TELEFON") + "\t");
+        taVisaAlienInfo.append(hamtaInfo.get("BENAMNING") + "\n");
+    
+    } catch(InfException e) {
+        JOptionPane.showMessageDialog(null, "InfException");
+    } catch (NullPointerException e) {
+        
+    }
+    
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,13 +137,21 @@ public class VisaAllInfoAlien extends javax.swing.JPanel {
 
         jLabel1.setText("Välj ras:");
 
-        cbAlienIndivid.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbAlienIndivid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbAlienIndividActionPerformed(evt);
+            }
+        });
 
         taVisaAlienInfo.setColumns(20);
         taVisaAlienInfo.setRows(5);
         jScrollPane1.setViewportView(taVisaAlienInfo);
 
-        cbAlienRas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbAlienRas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbAlienRasActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Välj individ:");
 
@@ -68,9 +174,9 @@ public class VisaAllInfoAlien extends javax.swing.JPanel {
                                     .addComponent(cbAlienIndivid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel2)))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(101, Short.MAX_VALUE))
+                        .addGap(61, 61, 61)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -90,6 +196,17 @@ public class VisaAllInfoAlien extends javax.swing.JPanel {
                 .addContainerGap(78, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cbAlienRasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAlienRasActionPerformed
+        // TODO add your handling code here:
+        sattVardeCbValjIndivid();
+        
+    }//GEN-LAST:event_cbAlienRasActionPerformed
+
+    private void cbAlienIndividActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAlienIndividActionPerformed
+        // TODO add your handling code here:
+        printInfo();
+    }//GEN-LAST:event_cbAlienIndividActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -226,8 +226,8 @@ public class Inloggning extends javax.swing.JPanel {
             else if(behorighet == 2){
             new MainFrameAlien_1(idb).setVisible(true);
             }
-            else if(behorighet ==3){
-            new MainFrameAdmin().setVisible(true);
+            else if(behorighet == 3){
+            new MainFrameAdmin(idb).setVisible(true);
             }
         }
         else{
