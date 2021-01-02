@@ -184,7 +184,7 @@ public class SokAliensMellanDatum extends javax.swing.JPanel {
         taVisaAliens.append("");
         
        ArrayList<HashMap<String, String>> sokAlien = new ArrayList<HashMap<String,String>>();
-       
+       System.out.println(formatter.format(datumStart2) + " " + formatter.format(datumSlut2));
        String sqlFraga = "Select namn, alien_id from alien where registreringsdatum between '" + formatter.format(datumStart2) + "' and '" + formatter.format(datumSlut2) + "'";
 
        try{
@@ -391,7 +391,7 @@ public class SokAliensMellanDatum extends javax.swing.JPanel {
     }//GEN-LAST:event_cbSlutDagActionPerformed
 
     private void btnSokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSokActionPerformed
-     
+        System.out.println(validaDatum());
         if(validaDatum()){
             fyllTextSok();
         }
