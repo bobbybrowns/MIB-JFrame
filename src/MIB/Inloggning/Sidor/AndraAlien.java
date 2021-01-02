@@ -46,9 +46,8 @@ public class AndraAlien extends javax.swing.JPanel {
         setSql();
         String sql = "update alien set " + sqlFragan + " where alien_id = " + alienID; 
         String sqlArvWORM = "insert into WORM values(" + alienID+")";
-        String sqlAnnanRas = "insert into " + cbRas.getSelectedItem().toString() + " values(" + alienID + ", " 
-                                + jArvInput.getText().toString() + ")";
-        System.out.println(sqlAnnanRas);
+        String sqlAnnanRas = "";
+        
         try{ 
             // lägger till i databasen
             idb.update(sql);
@@ -57,17 +56,18 @@ public class AndraAlien extends javax.swing.JPanel {
         }
         
         if(rasHarVarde){
+            
         try{
                 if(cbRas.getSelectedItem().toString().equals("WORM")){
-                    searchAlienInDatabaseAndRemove();
+                       searchAlienInDatabaseAndRemove(alienID);
                     idb.insert(sqlArvWORM);
                     
                 } else if(cbRas.getSelectedItem().toString().equals("BOGLODITE") || cbRas.getSelectedItem().toString().equals("SQUID")){
-                    searchAlienInDatabaseAndRemove();
-                    idb.insert(sqlAnnanRas);
-                    
-                } else {
-                    searchAlienInDatabaseAndRemove();
+                    sqlAnnanRas = "insert into " + cbRas.getSelectedItem().toString() + " values(" + alienID + ", " + Integer.parseInt(jArvInput.getText().toString()) + ")";    
+                    searchAlienInDatabaseAndRemove(alienID);     
+                    idb.insert(sqlAnnanRas); 
+                } else if (cbRas.getSelectedItem().toString().equals("Ingen ras")) {
+                    searchAlienInDatabaseAndRemove(alienID);
                 }
         } catch(InfException e){
             System.out.println("Databas fel, ändra alien.");
@@ -76,27 +76,27 @@ public class AndraAlien extends javax.swing.JPanel {
 
     }
     
-    public void searchAlienInDatabaseAndRemove(){
-        alienID = Integer.parseInt(jComboBox1.getSelectedItem().toString());
-        String q = "select alien_id from alien where alien_id = " + alienID;
-        String Boglodite = "select alien_id from BOGLODITE where alien_id = " + alienID;
-        String Worm = "select alien_id from WORM where alien_id = "+ alienID;
-        String Squid = "select alien_id from SQUID where alien_id = " + alienID;
+    public void searchAlienInDatabaseAndRemove(int alien){
+        //alienID = Integer.parseInt(jComboBox1.getSelectedItem().toString());
+        String q = "select alien_id from alien where alien_id = " + alien;
+        String Boglodite = "select alien_id from BOGLODITE where alien_id = " + alien;
+        String Worm = "select alien_id from WORM where alien_id = "+ alien;
+        String Squid = "select alien_id from SQUID where alien_id = " + alien;
         
         
         try{
-        if(idb.fetchSingle(Worm).equals(idb.fetchSingle(q))){
-            idb.delete("delete from worm where alien_id = " + alienID);
-        } else if(idb.fetchSingle(Boglodite).equals(idb.fetchSingle(q))){
-            idb.delete("delete from Boglodite where alien_id = " + alienID);
-        } else if(idb.fetchSingle(Squid).equals(idb.fetchSingle(q))){
-            idb.delete("delete from Squid where alien_id = " + alienID);
+        if(idb.fetchSingle(q).equals(idb.fetchSingle(Worm))){
+            idb.delete("delete from worm where alien_id = " + alien);
+        } else if(idb.fetchSingle(q).equals(idb.fetchSingle(Boglodite))){
+            idb.delete("delete from boglodite where alien_id = " + alien);
+        } else if(idb.fetchSingle(q).equals(idb.fetchSingle(Squid))){
+            idb.delete("delete from squid where alien_id = " + alien);
         } 
 
         } catch (InfException e) {
-            
+            System.out.println("inf");
         } catch (NullPointerException e) {
-            
+            System.out.println("nullpo");
         }
     }
     
@@ -127,9 +127,9 @@ public class AndraAlien extends javax.swing.JPanel {
            sql.add("ANSVARIG_AGENT = '" + sqlAnsvarigAgent +"'");
         }
         
-        if(!cbRas.getSelectedItem().toString().equals("-")){
-           sql.add("RAS = '" + cbRas.getSelectedItem().toString()+"'");
-        }
+//        if(!cbRas.getSelectedItem().toString().equals("-")){
+//           sql.add("RAS = '" + cbRas.getSelectedItem().toString()+"'");
+//        }
         
         alienID = Integer.parseInt(jComboBox1.getSelectedItem().toString());
         
@@ -389,6 +389,8 @@ public class AndraAlien extends javax.swing.JPanel {
                 jArv.setVisible(false);
                 jArvInput.setVisible(false);
             }
+        } else if (!cbRas.getSelectedItem().equals("Ingen ras")) {
+            rasHarVarde = true;
         } else {
             rasHarVarde = false;
             jArv.setVisible(false);

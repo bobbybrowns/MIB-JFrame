@@ -181,7 +181,7 @@ public class SokAliensMellanDatum extends javax.swing.JPanel {
     }
     
     public void fyllTextSok(){
-        taVisaAliens.append("");
+        taVisaAliens.removeAll();
         
        ArrayList<HashMap<String, String>> sokAlien = new ArrayList<HashMap<String,String>>();
        System.out.println(formatter.format(datumStart2) + " " + formatter.format(datumSlut2));
@@ -192,10 +192,10 @@ public class SokAliensMellanDatum extends javax.swing.JPanel {
        } catch (InfException e){
            
        } 
-       taVisaAliens.append("Namn \t" + "Alien ID \n");
+       taVisaAliens.setText("Namn \t" + "Alien ID \n");
        for(HashMap<String, String> aliens : sokAlien){
-           taVisaAliens.append(aliens.get("NAMN") + "\t");
-           taVisaAliens.append(aliens.get("ALIEN_ID") + "\n");
+           taVisaAliens.setText(aliens.get("NAMN") + "\t");
+           taVisaAliens.setText(aliens.get("ALIEN_ID") + "\n");
        }
     }
     
