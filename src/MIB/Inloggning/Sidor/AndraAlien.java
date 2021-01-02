@@ -9,7 +9,7 @@ import MIB.Validering;
 import java.util.ArrayList;
 import oru.inf.InfDB;
 import oru.inf.InfException;
-
+import java.util.HashMap;
 
 
 /**
@@ -18,131 +18,90 @@ import oru.inf.InfException;
  */
 public class AndraAlien extends javax.swing.JPanel {
     private InfDB idb;
-    private ArrayList<String> sql;
+    private HashMap<String, Boolean> sqlUpdate;
+    private boolean namnHarVarde;
+    private boolean telefonHarVarde;
     private boolean rasHarVarde;
-    private String losen;
-    private String sqlFragan;
-    private int alienID;
-    private String insertToTable;
+    private boolean platsHarVarde;
+    private boolean arvHarVarde;
+    private boolean losenordHarVarde;
+
+    
     
     
     public AndraAlien(InfDB databasen) {
         initComponents();
-        sqlFragan = "";
         idb = databasen;
+        namnHarVarde = false;
+        telefonHarVarde = false;
         rasHarVarde =  false;
-        sql = new ArrayList<>();
-        losen = "";
+        platsHarVarde = false;
+        arvHarVarde = false;
+        losenordHarVarde =  false;
+        jArv.setVisible(false);
+        jArvInput.setVisible(false);
+        sqlUpdate = new HashMap<>();
+        
+        
         
         settAlienID();
         setRas();
-        setPlats();
-        jArv.setVisible(false);
-        jArvInput.setVisible(false);
-        
+        setPlats();  
     }
-    // DELETE FROM alien where alien_id = 4;
+    
     public void uppdateraAlien(){
-        setSql();
-        String sql = "update alien set " + sqlFragan + " where alien_id = " + alienID; 
-        String sqlArvWORM = "insert into WORM values(" + alienID+")";
-        String sqlAnnanRas = "insert into " + cbRas.getSelectedItem().toString() + " values(" + alienID + ", " 
-                                + jArvInput.getText().toString() + ")";
-        System.out.println(sqlAnnanRas);
-        try{ 
-            // lägger till i databasen
-            idb.update(sql);
-        } catch (InfException e){
-            
+        String sqlQ;
+        sqlUpdate = setValue();
+        for(String i : sqlUpdate.keySet()){
+            sqlQ = " " + i + " = '" + sqlUpdate.get(i) + "' ,";
         }
-        
-        if(rasHarVarde){
-        try{
-                if(cbRas.getSelectedItem().toString().equals("WORM")){
-                    searchAlienInDatabaseAndRemove();
-                    idb.insert(sqlArvWORM);
-                    
-                } else if(cbRas.getSelectedItem().toString().equals("BOGLODITE") || cbRas.getSelectedItem().toString().equals("SQUID")){
-                    searchAlienInDatabaseAndRemove();
-                    idb.insert(sqlAnnanRas);
-                    
-                } else {
-                    searchAlienInDatabaseAndRemove();
-                }
-        } catch(InfException e){
-            System.out.println("Databas fel, ändra alien.");
-        }
-        }
-
+        System.out.println();
+        // update alien set 'boleantyp' = 'textvärdefältet' where alien_id  = cbbox1;
     }
     
-    public void searchAlienInDatabaseAndRemove(){
-        alienID = Integer.parseInt(jComboBox1.getSelectedItem().toString());
-        String q = "select alien_id from alien where alien_id = " + alienID;
-        String Boglodite = "select alien_id from BOGLODITE where alien_id = " + alienID;
-        String Worm = "select alien_id from WORM where alien_id = "+ alienID;
-        String Squid = "select alien_id from SQUID where alien_id = " + alienID;
-        
-        
-        try{
-        if(idb.fetchSingle(Worm).equals(idb.fetchSingle(q))){
-            idb.delete("delete from worm where alien_id = " + alienID);
-        } else if(idb.fetchSingle(Boglodite).equals(idb.fetchSingle(q))){
-            idb.delete("delete from Boglodite where alien_id = " + alienID);
-        } else if(idb.fetchSingle(Squid).equals(idb.fetchSingle(q))){
-            idb.delete("delete from Squid where alien_id = " + alienID);
-        } 
-
-        } catch (InfException e) {
-            
-        } catch (NullPointerException e) {
-            
-        }
-    }
     
-    public void setSql(){
-        
+    public void setBooleans(){
         if(!tfNamn.getText().isEmpty()){
-            sql.add("NAMN = '" + tfNamn.getText()+"'");    
+            namnHarVarde = true;
+            System.out.println(namnHarVarde);
         } 
         
         if(!tfTelefon.getText().isEmpty()){
-            sql.add("TELEFON = '" + tfTelefon.getText()+"'");
-        } 
+            telefonHarVarde = true;
+        } else {
+            telefonHarVarde = false;
+        }
         
         char[] password = pfLosenord.getPassword();
-        losen = String.valueOf(password);
+        String losen = String.valueOf(password);
         if(!losen.isEmpty() && Validering.passwordSix(pfLosenord)){
-            sql.add("LOSENORD = '" + losen+"'");
-        } 
+            losenordHarVarde = true;
+        } else {
+            losenordHarVarde = false;
+        }
+    }
+    public HashMap setValue() {   
+        setBooleans();
         
-        if(!cbPlats.getSelectedItem().toString().equals("-")){
-            String sqlAnsvarigAgent = "select agent_id from omradeschef where omrade = " +  cbPlats.getSelectedItem().toString();
-            try{
-                sqlAnsvarigAgent = idb.fetchSingle(sqlAnsvarigAgent);
-            } catch (InfException e) {
+        sqlUpdate.put("NAMN",namnHarVarde);
+        sqlUpdate.put("TELEFON,",telefonHarVarde);
+        sqlUpdate.put("LOSENORD",losenordHarVarde);
+        sqlUpdate.put("PLATS",platsHarVarde);
+        sqlUpdate.put("RAS",rasHarVarde);
+        sqlUpdate.put(jComboBox1.getSelectedItem().toString(),arvHarVarde);
+        
+        for(String key : sqlUpdate.keySet()){
+            System.out.println(sqlUpdate.get(key));
+            if(sqlUpdate.get(key) == false){
+                sqlUpdate.entrySet().remove(key);
+            } else {
                 
             }
-           sql.add("PLATS = '" + cbPlats.getSelectedItem().toString()+"'"); 
-           sql.add("ANSVARIG_AGENT = '" + sqlAnsvarigAgent +"'");
         }
+    
         
-        if(!cbRas.getSelectedItem().toString().equals("-")){
-           sql.add("RAS = '" + cbRas.getSelectedItem().toString()+"'");
-        }
-        
-        alienID = Integer.parseInt(jComboBox1.getSelectedItem().toString());
-        
-        for(int i = 0; i < sql.size(); i++){
-            
-            sqlFragan = sqlFragan+ " " + sql.get(i);
-            if(sql.size() - (i + 1) != 0 ){
-                sqlFragan = sqlFragan + ", ";
-            }
-        }
-         
+        return sqlUpdate;
     }
-
 
     public void settAlienID(){
         String fraga = "select Alien_id from alien";
@@ -150,9 +109,11 @@ public class AndraAlien extends javax.swing.JPanel {
         
         try {
             fyllCB = idb.fetchColumn(fraga);
+            
         } catch(InfException e){
             
         }
+        
         for(String alienID : fyllCB) {
             jComboBox1.addItem(alienID);
         }
@@ -210,7 +171,6 @@ public class AndraAlien extends javax.swing.JPanel {
         jComboBox1 = new javax.swing.JComboBox<>();
         jArvInput = new javax.swing.JTextField();
         jArv = new javax.swing.JLabel();
-        ValdAlien = new javax.swing.JLabel();
 
         jLabel1.setText("Ändra informationen om alien nedan");
 
@@ -269,6 +229,7 @@ public class AndraAlien extends javax.swing.JPanel {
             }
         });
 
+        jArvInput.setText("jTextField1");
         jArvInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jArvInputActionPerformed(evt);
@@ -277,49 +238,42 @@ public class AndraAlien extends javax.swing.JPanel {
 
         jArv.setText("Om sant visa");
 
-        ValdAlien.setText("jLabel8");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(109, 109, 109))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(4, 4, 4)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnSpara, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(cbRas, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(cbPlats, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(tfTelefon, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(pfLosenord, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(tfNamn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)))
-                                .addGap(24, 24, 24)))
-                        .addGap(7, 7, 7))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(ValdAlien, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)))
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(109, 109, 109))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnSpara, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(cbRas, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cbPlats, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tfTelefon, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(pfLosenord, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tfNamn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)))
+                        .addGap(24, 24, 24)))
+                .addGap(7, 7, 7)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jArv, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jArvInput, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jArvInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jArv, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -331,9 +285,7 @@ public class AndraAlien extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                .addComponent(ValdAlien)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(tfNamn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -362,28 +314,30 @@ public class AndraAlien extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        String sqlFraga = "select namn from alien where alien_id = " + jComboBox1.getSelectedItem().toString();
-        try{
-            ValdAlien.setText("Du har valt att ändra på alien "+ idb.fetchSingle(sqlFraga));
-        } catch (InfException e) {
-            
-        }
+        
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void cbPlatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPlatsActionPerformed
-
+        try{
+        if(!cbPlats.getSelectedItem().equals("-")){
+            platsHarVarde = true;
+        } else {
+            platsHarVarde = false;
+        }
+        } catch (NullPointerException e) {
+            
+        }
     }//GEN-LAST:event_cbPlatsActionPerformed
 
     private void cbRasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRasActionPerformed
         try{
-            // !cbPlats.getSelectedItem().equals("Ingen ras")
-        if(!cbRas.getSelectedItem().equals("-")){ 
+        if(!cbPlats.getSelectedItem().equals("-")){
            rasHarVarde = true;
            jArv.setVisible(true);
             jArvInput.setVisible(true);  
-            if(cbRas.getSelectedItem().equals("BOGLODITE")){
+            if(jArvInput.getText().equals("BOGLODITE")){
                 jArv.setText("Ange hur många boogies");
-            } else if(cbRas.getSelectedItem().equals("SQUID")) {
+            } else if(jArvInput.getText().equals("SQUID")) {
                 jArv.setText("Ange hur många armar");
             } else {
                 jArv.setVisible(false);
@@ -391,8 +345,6 @@ public class AndraAlien extends javax.swing.JPanel {
             }
         } else {
             rasHarVarde = false;
-            jArv.setVisible(false);
-            jArvInput.setVisible(false);
         } 
         } catch (NullPointerException e) {
             
@@ -401,8 +353,8 @@ public class AndraAlien extends javax.swing.JPanel {
     }//GEN-LAST:event_cbRasActionPerformed
 
     private void btnSparaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSparaActionPerformed
-      //searchAlienInDatabaseAndRemove();
-      uppdateraAlien();
+        
+        System.out.println(sqlUpdate);
             
         
     }//GEN-LAST:event_btnSparaActionPerformed
@@ -418,15 +370,17 @@ public class AndraAlien extends javax.swing.JPanel {
     private void pfLosenordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pfLosenordActionPerformed
 
     }//GEN-LAST:event_pfLosenordActionPerformed
-    
+
     private void jArvInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jArvInputActionPerformed
-       
-      
+        if(!jArvInput.getText().isEmpty()){
+            arvHarVarde = true;
+        } else {
+            arvHarVarde = false;
+        }
     }//GEN-LAST:event_jArvInputActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel ValdAlien;
     private javax.swing.JButton btnSpara;
     private javax.swing.JComboBox<String> cbPlats;
     private javax.swing.JComboBox<String> cbRas;
