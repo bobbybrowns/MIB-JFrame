@@ -227,7 +227,11 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblAlienNamnFranCB">
       <Properties>
+<<<<<<< Updated upstream
         <Property name="text" type="java.lang.String" value="Aliennamn"/>
+=======
+        <Property name="text" type="java.lang.String" value="H&#xe4;r ser man namnet p&#xe5; den valda alienen"/>
+>>>>>>> Stashed changes
       </Properties>
     </Component>
   </SubComponents>

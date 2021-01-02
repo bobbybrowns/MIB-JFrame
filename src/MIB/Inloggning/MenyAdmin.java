@@ -291,7 +291,7 @@ public class MenyAdmin extends javax.swing.JPanel {
 
     private void btnSokAliensDatumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSokAliensDatumActionPerformed
         // TODO add your handling code here:
-        sokAliensDatum = new JFSokAliensMellanDatum();
+        sokAliensDatum = new JFSokAliensMellanDatum(idb);
         sokAliensDatum.setVisible(true);
     }//GEN-LAST:event_btnSokAliensDatumActionPerformed
 

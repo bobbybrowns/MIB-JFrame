@@ -50,6 +50,7 @@ public class MenyAgent extends javax.swing.JPanel {
         andraAlien = new JFAndraAlien(idb);
         visaChefOmrade = new JFVisaChefOmrade(idb);
         visaAlienOmrade = new JFVisaAlienOmrade(idb);
+        sokAliensDatum = new JFSokAliensMellanDatum(idb);
         //mainFrame = new MainFrameAgent(idb);
     }
 
@@ -218,7 +219,7 @@ public class MenyAgent extends javax.swing.JPanel {
 
     private void btnSokAliensDatumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSokAliensDatumActionPerformed
         // TODO add your handling code here:
-        sokAliensDatum = new JFSokAliensMellanDatum();
+        sokAliensDatum = new JFSokAliensMellanDatum(idb);
         sokAliensDatum.setVisible(true);
     }//GEN-LAST:event_btnSokAliensDatumActionPerformed
 

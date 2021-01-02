@@ -239,7 +239,11 @@ public class AndraAlien extends javax.swing.JPanel {
 
         jArv.setText("Om sant visa");
 
+<<<<<<< Updated upstream
         lblAlienNamnFranCB.setText("Aliennamn");
+=======
+        ValdAlien.setText("Här ser man namnet på den valda alienen");
+>>>>>>> Stashed changes
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

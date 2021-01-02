@@ -21,9 +21,10 @@ public class JFSokAliensMellanDatum extends javax.swing.JFrame {
     /**
      * Creates new form JFSokAliensMellanDatum
      */
-    public JFSokAliensMellanDatum() {
+    public JFSokAliensMellanDatum(InfDB databasen) {
         initComponents();
-        sokAlienDatum = new SokAliensMellanDatum();
+        idb = databasen;
+        sokAlienDatum = new SokAliensMellanDatum(idb);
         pnlSokAliensMellanDatum.setLayout(new BorderLayout());
         pnlSokAliensMellanDatum.add(sokAlienDatum);
     }
@@ -96,7 +97,7 @@ public class JFSokAliensMellanDatum extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JFSokAliensMellanDatum().setVisible(true);
+                new JFSokAliensMellanDatum(idb).setVisible(true);
             }
         });
     }
