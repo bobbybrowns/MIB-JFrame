@@ -74,4 +74,15 @@ public class Validering {
         }
         return sant;
     }
+    public static boolean onlyNumbersPhone(JTextField phone){
+        boolean sant = true;
+        if(!phone.getText().toString().matches("^[0-9]*$")){
+            sant = false;
+            JOptionPane.showMessageDialog(null, "Ditt telefonnummer får bara innehålla siffror");
+        } else if(phone.getText().toString().length() >= 31) {
+            JOptionPane.showMessageDialog(null, "Max 30 karaktärer.");
+            sant = false;
+        }
+        return sant;
+    }
 }

@@ -5,6 +5,7 @@
  */
 package MIB.Inloggning;
 
+import MIB.Inloggning.Sidor.AndraAgent;
 import MIB.Inloggning.Sidor.AndraLosenord;
 import MIB.JFAndraAlien;
 import MIB.JFGeAgentAdmin;
@@ -34,6 +35,7 @@ public class MenyAdmin extends javax.swing.JPanel {
     JFVisaAllInfoAlien visaAllInfoAlien;
     JFVisaChefOmrade visaChefOmrade;
     JFGeAgentAdmin geAgentAdmin;
+    AndraAgent andraAgent;
     
     private static InfDB idb;
 
@@ -50,6 +52,7 @@ public class MenyAdmin extends javax.swing.JPanel {
         visaChefOmrade = new JFVisaChefOmrade(idb);
         visaAlienOmrade = new JFVisaAlienOmrade(idb);
         geAgentAdmin = new JFGeAgentAdmin(idb);
+        andraAgent = new AndraAgent(idb);
     }
 
     /**
@@ -321,6 +324,8 @@ public class MenyAdmin extends javax.swing.JPanel {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
+        andraAgent = new AndraAgent(idb);
+        andraAgent.setVisible(true);
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void btnGeAgentAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeAgentAdminActionPerformed

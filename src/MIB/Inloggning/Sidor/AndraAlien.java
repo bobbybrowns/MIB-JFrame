@@ -23,7 +23,7 @@ public class AndraAlien extends javax.swing.JPanel {
     private String losen;
     private String sqlFragan;
     private int alienID;
-    private String insertToTable;
+    
     
     
     public AndraAlien(InfDB databasen) {
@@ -77,7 +77,7 @@ public class AndraAlien extends javax.swing.JPanel {
     }
     
     public void searchAlienInDatabaseAndRemove(int alien){
-        //alienID = Integer.parseInt(jComboBox1.getSelectedItem().toString());
+        
         String q = "select alien_id from alien where alien_id = " + alien;
         String Boglodite = "select alien_id from BOGLODITE where alien_id = " + alien;
         String Worm = "select alien_id from WORM where alien_id = "+ alien;
@@ -126,10 +126,7 @@ public class AndraAlien extends javax.swing.JPanel {
            sql.add("PLATS = '" + cbPlats.getSelectedItem().toString()+"'"); 
            sql.add("ANSVARIG_AGENT = '" + sqlAnsvarigAgent +"'");
         }
-        
-//        if(!cbRas.getSelectedItem().toString().equals("-")){
-//           sql.add("RAS = '" + cbRas.getSelectedItem().toString()+"'");
-//        }
+
         
         alienID = Integer.parseInt(jComboBox1.getSelectedItem().toString());
         
