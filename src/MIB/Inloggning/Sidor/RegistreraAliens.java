@@ -108,7 +108,7 @@ public class RegistreraAliens extends javax.swing.JPanel {
     
     public void laggTillAlienMedArv(){
         String sqlFragan;
-        if(!jComboBox1.getSelectedItem().toString().equals("WORM") && Validering.convertStringToInt(ValjaRasArv)){
+        if(!jComboBox1.getSelectedItem().toString().equals("WORM")){
             rasArvInput = Integer.parseInt(ValjaRasArv.getText());
             sqlFragan = "insert into "  + jComboBox1.getSelectedItem().toString() + " values("+max+", " + rasArvInput + ")";
         } else {
@@ -279,13 +279,15 @@ public class RegistreraAliens extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(!jComboBox1.getSelectedItem().equals("Ingen ras")){
+        if(jComboBox1.getSelectedItem().equals("SQUID") || jComboBox1.getSelectedItem().equals("BOGLODITE")){
             if(Validering.convertStringToInt(ValjaRasArv)){
                 laggTillAlien();
                 laggTillAlienMedArv();
-            
-            } 
-        } else {
+            }
+        } else if(jComboBox1.getSelectedItem().equals("WORM")) {
+            laggTillAlien();
+            laggTillAlienMedArv();
+        }else {
             laggTillAlien();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
