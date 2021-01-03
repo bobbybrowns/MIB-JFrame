@@ -5,6 +5,7 @@
  */
 package MIB;
 
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -84,5 +85,14 @@ public class Validering {
             sant = false;
         }
         return sant;
+    }
+    
+    public static boolean matcharInteNamn(ArrayList<String> arry, String compare){
+        boolean inteDubbla = true;
+        if(arry.contains(compare)){
+        inteDubbla = false;
+        JOptionPane.showMessageDialog(null, "Det finns redan en agent med namnet " + compare);
+    }
+        return inteDubbla;
     }
 }

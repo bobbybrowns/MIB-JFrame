@@ -21,12 +21,14 @@ public class AndraAgent extends javax.swing.JFrame {
    private String agentNamn;
    private InfDB idb;
    private String sqlFragan;
+   private ArrayList<String> sokagent;
    
     public AndraAgent(InfDB databasen) {
         idb = databasen;
         initComponents();
         setDBAgenter();
         sqlFragan = "";
+        sokagent = new ArrayList<String>();
         sql = new ArrayList<>();
         Firstchar.setText("Vi tar bara första bokstaven av inmatningen");
         spara.setVisible(false);
@@ -40,26 +42,31 @@ public class AndraAgent extends javax.swing.JFrame {
         
         try{
             idb.update(sql);
+            spara.setVisible(true);
         } catch (InfException e) {
             
         }
     }
     
     private void setSQL(){
+        sokNamn();
         String losen;
         char[] password = jPasswordField1.getPassword();
         losen = String.valueOf(password);
-        System.out.println(losen + " lösen");
         
-        if(!losen.isEmpty()){
+        
+        if(!losen.isEmpty() && Validering.passwordSix(jPasswordField1)){
             sql.add("LOSENORD = '" + losen + "'");
         }  
         
         if(!jTextNamn.getText().isEmpty()){
-            sql.add("NAMN = 'Agent " + jTextNamn.getText().toUpperCase().charAt(0)+"'");    
+            String namn = "Agent " + jTextNamn.getText().toUpperCase().charAt(0);
+            if(Validering.matcharInteNamn(sokagent, namn)){
+            sql.add("NAMN = '" + namn +"'");    
+            }
         }
 
-        if(!jTextTelefon.getText().isEmpty()){
+        if(!jTextTelefon.getText().isEmpty() && Validering.onlyNumbersPhone(jTextTelefon)){
             sql.add("TELEFON = '" + jTextTelefon.getText()+"'");
         } 
         
@@ -84,6 +91,15 @@ public class AndraAgent extends javax.swing.JFrame {
         
         for(String agent : sokAgent){
             jComboBox1.addItem(agent);
+        }
+    }
+    
+    private void sokNamn(){
+        String sqlFraga1 = "select namn from agent";
+        try{
+        sokagent = idb.fetchColumn(sqlFraga1);
+        } catch (InfException e) {
+            
         }
     }
     /**
@@ -147,10 +163,7 @@ public class AndraAgent extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(43, 43, 43)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
+                        .addGap(69, 69, 69)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -161,10 +174,12 @@ public class AndraAgent extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTextTelefon, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(Firstchar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(spara, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(spara, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(66, 66, 66)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -205,11 +220,11 @@ public class AndraAgent extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(Validering.onlyNumbersPhone(jTextTelefon) && Validering.passwordSix(jPasswordField1)){
+       
+       
             uppdateraAgent();
-
-            spara.setVisible(true);
-        }
+            
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextNamnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextNamnActionPerformed
