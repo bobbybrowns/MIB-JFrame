@@ -62,7 +62,7 @@ public class AndraAgent extends javax.swing.JFrame {
         if(!jTextNamn.getText().isEmpty()){
             String namn = "Agent " + jTextNamn.getText().toUpperCase().charAt(0);
             if(Validering.matcharInteNamn(sokagent, namn)){
-            sql.add("NAMN = '" + namn +"'");    
+                sql.add("NAMN = '" + namn +"'");    
             }
         }
 
@@ -220,9 +220,7 @@ public class AndraAgent extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
-       
-            uppdateraAgent();
+        uppdateraAgent();
             
         
     }//GEN-LAST:event_jButton1ActionPerformed

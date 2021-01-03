@@ -65,7 +65,6 @@ public class SokAliensMellanDatum extends javax.swing.JPanel {
         }
         
     }
-
     
     public void setManad(){
         cbSlutManad.removeAllItems();
@@ -98,27 +97,22 @@ public class SokAliensMellanDatum extends javax.swing.JPanel {
             case 1: 
                 manad = Month.JANUARY;
                 setDag(manad.length(skottAr), dag);
-                System.out.println("1");
                 break;
             case 2: 
                 manad = Month.FEBRUARY;
                 setDag(manad.length(skottAr), dag);
-                System.out.println("2");
                 break;
             case 3: 
                 manad = Month.MARCH;
                 setDag(manad.length(skottAr), dag);
-                System.out.println("3");
                 break;
             case 4:
                 manad = Month.APRIL;
                 setDag(manad.length(true), dag);
-                System.out.println("4");
                 break;
             case 5: 
                 manad = Month.MAY;
                 setDag(manad.length(skottAr), dag);
-                System.out.println("5");
                 break;
             case 6: 
                 manad = Month.JUNE;
@@ -181,10 +175,10 @@ public class SokAliensMellanDatum extends javax.swing.JPanel {
     }
     
     public void fyllTextSok(){
-        taVisaAliens.removeAll();
+        taVisaAliens.append("");
         
        ArrayList<HashMap<String, String>> sokAlien = new ArrayList<HashMap<String,String>>();
-       System.out.println(formatter.format(datumStart2) + " " + formatter.format(datumSlut2));
+
        String sqlFraga = "Select namn, alien_id from alien where registreringsdatum between '" + formatter.format(datumStart2) + "' and '" + formatter.format(datumSlut2) + "'";
 
        try{
@@ -192,10 +186,10 @@ public class SokAliensMellanDatum extends javax.swing.JPanel {
        } catch (InfException e){
            
        } 
-       taVisaAliens.setText("Namn \t" + "Alien ID \n");
+       taVisaAliens.append("Namn \t" + "Alien ID \n");
        for(HashMap<String, String> aliens : sokAlien){
-           taVisaAliens.setText(aliens.get("NAMN") + "\t");
-           taVisaAliens.setText(aliens.get("ALIEN_ID") + "\n");
+           taVisaAliens.append(aliens.get("NAMN") + "\t");
+           taVisaAliens.append(aliens.get("ALIEN_ID") + "\n");
        }
     }
     
@@ -391,7 +385,6 @@ public class SokAliensMellanDatum extends javax.swing.JPanel {
     }//GEN-LAST:event_cbSlutDagActionPerformed
 
     private void btnSokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSokActionPerformed
-        System.out.println(validaDatum());
         if(validaDatum()){
             fyllTextSok();
         }
